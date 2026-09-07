@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>เสนอไอเดียกิจกรรม</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="back" href="index.html">‹ กลับ</a>
+<h1>เสนอไอเดียกิจกรรม</h1>
+<p class="sub">มีไอเดียสนุก ๆ อยากให้จัด? บอกเรามาได้เลย</p>
+
+<div class="card">
+<form id="eventForm">
+  <div class="grid">
+    <div class="full"><label>ชื่อผู้เสนอ</label><input name="name" placeholder="ชื่อของคุณ" required></div>
+    <div class="full"><label>ช่องทางติดต่อ</label><input name="contact" placeholder="Discord / Line" required></div>
+    <div class="full"><label>ชื่อกิจกรรม</label><input name="eventName" placeholder="ตั้งชื่อกิจกรรมสั้น ๆ" required></div>
+    <div class="full"><label>ไอเดียกิจกรรม</label><textarea name="detail" placeholder="อยากให้จัดกิจกรรมอะไร เล่าได้เราฟังได้เลย..."></textarea></div>
+  </div>
+  <button type="submit">ยืนยัน</button>
+</form>
+</div>
+
+<script src="form.js"></script>
+<script>
+document.getElementById("eventForm").addEventListener("submit",function(e){
+  e.preventDefault();const f=e.target;
+  sendForm("event",{
+    name:f.name.value,contact:f.contact.value,
+    eventName:f.eventName.value,detail:f.detail.value
+  },f);
+});
+</script>
+</body>
+</html>
