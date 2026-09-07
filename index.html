@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTHER WORLD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Charmonman:wght@400;700&family=Taviraj:wght@300;400;500;600&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#150a10;
+    --bg-1:#1e0f18;
+    --bg-2:#271420;
+    --pink:#eaa6c6;
+    --pink-soft:#f3c4dc;
+    --pink-deep:#c9628f;
+    --gold:#c9a66b;
+    --ink:#f3e5ee;
+    --ink-muted:#c9a9bb;
+    --line:rgba(234,166,198,0.22);
+    --card:rgba(234,166,198,0.055);
+    --shadow:0 20px 50px rgba(0,0,0,0.45);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(234,166,198,0.10), transparent 60%),
+      radial-gradient(1000px 700px at 110% 10%, rgba(201,166,107,0.08), transparent 55%),
+      linear-gradient(180deg, var(--bg-0), var(--bg-1) 45%, var(--bg-0));
+    color:var(--ink);
+    font-family:'Sarabun', sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  .th-serif{font-family:'Taviraj','Cormorant Garamond',serif;}
+  .display{font-family:'Cormorant Garamond','Taviraj',serif;}
+  .script{font-family:'Charmonman', cursive;}
+
+  /* faint stars */
+  #stars{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.5;}
+  #stars span{position:absolute;width:2px;height:2px;background:var(--pink-soft);border-radius:50%;opacity:.35;animation:tw 5s ease-in-out infinite;}
+  @keyframes tw{0%,100%{opacity:.15}50%{opacity:.7}}
+
+  .page{
+    display:none;
+    position:relative;
+    z-index:1;
+    min-height:100vh;
+    padding:64px 22px 90px;
+    max-width:980px;
+    margin:0 auto;
+  }
+  .page.active{display:block; animation:fadeIn .5s ease;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+
+  .back-btn{
+    position:fixed; top:18px; left:18px; z-index:20;
+    background:rgba(20,10,16,0.55);
+    border:1px solid var(--line);
+    color:var(--pink-soft);
+    font-family:'Sarabun',sans-serif;
+    font-size:13px;
+    padding:8px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    backdrop-filter:blur(6px);
+    transition:.2s;
+  }
+  .back-btn:hover{border-color:var(--pink); color:var(--ink);}
+
+  .eyebrow-mark{
+    width:34px;height:1px;background:linear-gradient(90deg, var(--gold), transparent);
+    margin-bottom:14px;
+  }
+
+  h1.hero-title{
+    font-size:clamp(46px, 9vw, 96px);
+    letter-spacing:.08em;
+    color:var(--pink-soft);
+    text-shadow:0 0 34px rgba(234,166,198,0.35);
+    margin:0 0 6px;
+    font-weight:600;
+  }
+  h2.page-title{
+    font-size:clamp(30px, 5vw, 42px);
+    color:var(--pink-soft);
+    margin:0 0 8px;
+    font-weight:600;
+  }
+  p.lede{color:var(--ink-muted); font-size:16px; line-height:1.8; max-width:56ch;}
+
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:linear-gradient(135deg, var(--pink-deep), #8a3f61);
+    color:#fff0f6;
+    border:1px solid rgba(255,255,255,0.12);
+    padding:13px 26px;
+    border-radius:10px;
+    font-family:'Sarabun',sans-serif;
+    font-size:15px;
+    font-weight:500;
+    cursor:pointer;
+    box-shadow:0 10px 24px rgba(201,98,143,0.28);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .btn:hover{transform:translateY(-2px); box-shadow:0 14px 30px rgba(201,98,143,0.4);}
+  .btn.ghost{
+    background:transparent; color:var(--pink-soft); border:1px solid var(--line); box-shadow:none;
+  }
+  .btn.ghost:hover{border-color:var(--pink); background:rgba(234,166,198,0.06);}
+  .btn.small{padding:9px 16px; font-size:13px;}
+
+  /* ---------- PAGE 1 : COVER ---------- */
+  #page1.active{display:flex; align-items:center; justify-content:center; min-height:100vh; text-align:center; padding-top:0;}
+  .cover-wrap .glyph{
+    width:64px; height:64px; margin:0 auto 22px;
+    border:1px solid var(--gold); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--gold); font-size:26px; opacity:.85;
+  }
+  .cover-wrap .subtitle{color:var(--ink-muted); font-size:16px; margin:10px 0 34px; letter-spacing:.02em;}
+
+  /* ---------- PAGE 2 : TOC ---------- */
+  .toc-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:34px;}
+  @media(max-width:640px){.toc-grid{grid-template-columns:1fr;}}
+  .toc-card{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:22px; cursor:pointer; transition:.2s; text-align:left;
+  }
+  .toc-card:hover{border-color:var(--pink); background:rgba(234,166,198,0.1); transform:translateY(-3px);}
+  .toc-num{color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:14px; letter-spacing:.15em;}
+  .toc-name{font-size:20px; color:var(--ink); margin:6px 0 6px; font-weight:600;}
+  .toc-desc{color:var(--ink-muted); font-size:13.5px; line-height:1.6;}
+
+  /* ---------- PAGE 3 : POSITIONS ---------- */
+  .pos-list{margin-top:30px; display:flex; flex-direction:column; gap:12px;}
+  .pos-item{border:1px solid var(--line); border-radius:12px; background:var(--card); overflow:hidden;}
+  .pos-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 20px; cursor:pointer;
+  }
+  .pos-head:hover .pos-name{color:var(--pink-soft);}
+  .pos-name{font-size:18px; font-weight:600; color:var(--ink); transition:.2s;}
+  .pos-tag{color:var(--ink-muted); font-size:12.5px;}
+  .pos-arrow{color:var(--gold); transition:transform .25s;}
+  .pos-item.open .pos-arrow{transform:rotate(180deg);}
+  .pos-body{max-height:0; overflow:hidden; transition:max-height .32s ease;}
+  .pos-item.open .pos-body{max-height:420px;}
+  .pos-body-in{padding:0 20px 22px; color:var(--ink-muted); font-size:14.5px; line-height:1.8;}
+  .pos-body-in b{color:var(--pink-soft); font-weight:600;}
+  .pos-body-in ul{margin:6px 0 14px; padding-left:18px;}
+
+  /* ---------- PAGE 4 : ACTIVITIES ---------- */
+  .gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:26px;}
+  @media(max-width:640px){.gallery{grid-template-columns:1fr 1fr;}}
+  .gallery-item{
+    aspect-ratio:4/3; border-radius:12px; border:1px solid var(--line);
+    background:linear-gradient(135deg, rgba(234,166,198,0.18), rgba(201,166,107,0.12));
+    display:flex; align-items:center; justify-content:center;
+    color:var(--ink-muted); font-size:13px; text-align:center; padding:8px;
+  }
+  .section-block{margin-top:46px;}
+  .suggest-box{
+    background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px; margin-top:16px;
+  }
+  .field{margin-bottom:14px;}
+  .field label{display:block; font-size:13px; color:var(--ink-muted); margin-bottom:6px;}
+  .field input, .field textarea, .field select{
+    width:100%; background:rgba(0,0,0,0.22); border:1px solid var(--line); border-radius:8px;
+    padding:11px 13px; color:var(--ink); font-family:'Sarabun',sans-serif; font-size:14.5px;
+  }
+  .field textarea{resize:vertical; min-height:90px;}
+  .field input:focus, .field textarea:focus, .field select:focus{outline:none; border-color:var(--pink);}
+
+  .cal-wrap{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px; margin-top:16px;}
+  .cal-header{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;}
+  .cal-header span{color:var(--pink-soft); font-size:17px; font-weight:600;}
+  .cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:6px; text-align:center;}
+  .cal-dow{color:var(--gold); font-size:12px; padding-bottom:4px;}
+  .cal-day{
+    aspect-ratio:1; border-radius:8px; font-size:13px; color:var(--ink-muted);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    border:1px solid transparent; position:relative;
+  }
+  .cal-day.has-event{border-color:var(--line); background:rgba(234,166,198,0.08); color:var(--ink);}
+  .cal-day.today{border-color:var(--pink);}
+  .cal-dot{width:4px;height:4px;border-radius:50%; background:var(--pink); margin-top:2px;}
+  .cal-legend{margin-top:14px; font-size:12.5px; color:var(--ink-muted);}
+
+  /* ---------- PAGE 5 : RANKS ---------- */
+  .rank-contact{
+    display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 22px; margin:24px 0 30px;
+  }
+  .rank-contact p{margin:0; color:var(--ink-muted); font-size:14px;}
+  .rank-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
+  @media(max-width:640px){.rank-grid{grid-template-columns:1fr;}}
+  .rank-card{border:1px solid var(--line); border-radius:14px; background:var(--card); padding:20px;}
+  .rank-top{display:flex; justify-content:space-between; align-items:flex-start;}
+  .rank-title{font-size:17px; font-weight:600; color:var(--ink);}
+  .rank-price{color:var(--gold); font-size:14px; white-space:nowrap;}
+  .rank-type{display:inline-block; font-size:11px; color:var(--pink-soft); border:1px solid var(--line); padding:2px 9px; border-radius:999px; margin:8px 0;}
+  .rank-colors{display:flex; gap:6px; margin:10px 0;}
+  .swatch{width:20px; height:20px; border-radius:6px; border:1px solid rgba(255,255,255,0.25);}
+  .rank-desc{color:var(--ink-muted); font-size:13.5px; line-height:1.7;}
+
+  /* ---------- PAGE 6 : TOP ---------- */
+  .top-banner{
+    aspect-ratio:21/8; border-radius:16px; border:1px solid var(--line); margin-top:26px;
+    background:linear-gradient(135deg, rgba(234,166,198,0.22), rgba(201,166,107,0.14));
+    display:flex; align-items:center; justify-content:center; color:var(--ink-muted); font-size:14px;
+  }
+  .countdown{display:flex; gap:10px; justify-content:center; margin:26px 0;}
+  .cd-box{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; text-align:center; min-width:66px;}
+  .cd-num{font-size:26px; color:var(--pink-soft); font-weight:600; font-family:'Cormorant Garamond',serif;}
+  .cd-label{font-size:11px; color:var(--ink-muted); margin-top:2px;}
+  .donor-list{margin-top:14px; display:flex; flex-direction:column; gap:8px;}
+  .donor-row{
+    display:flex; align-items:center; gap:14px; background:var(--card); border:1px solid var(--line);
+    border-radius:10px; padding:12px 16px;
+  }
+  .donor-rank{width:26px; height:26px; border-radius:50%; background:rgba(201,166,107,0.18); color:var(--gold);
+    display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; flex-shrink:0;}
+  .donor-name{flex:1; color:var(--ink);}
+  .donor-amt{color:var(--pink-soft); font-size:13.5px;}
+
+  /* ---------- PAGE 7 : FORM ---------- */
+  .form-card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:28px; margin-top:26px;}
+  .form-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px 18px;}
+  @media(max-width:640px){.form-grid{grid-template-columns:1fr;}}
+  .form-note{font-size:12.5px; color:var(--ink-muted); margin-top:4px;}
+  .form-status{margin-top:14px; font-size:13.5px; min-height:18px;}
+  .form-status.err{color:#e59aa8;}
+  .form-status.ok{color:#9adfc0;}
+
+  /* ---------- PAGE 8 : LETTER ---------- */
+  #page8.active{display:flex; align-items:center; justify-content:center; min-height:100vh;}
+  .letter{
+    max-width:560px; width:100%;
+    background:linear-gradient(180deg, #241019, #1b0d15);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:44px 40px;
+    box-shadow:var(--shadow);
+    position:relative;
+  }
+  .letter::before{
+    content:'';
+    position:absolute; inset:10px;
+    border:1px solid rgba(201,166,107,0.35);
+    border-radius:3px; pointer-events:none;
+  }
+  .seal{
+    width:58px; height:58px; border-radius:50%; margin:0 auto 18px;
+    background:radial-gradient(circle at 35% 30%, #d98bb0, #8a3f61 70%);
+    border:2px solid rgba(255,255,255,0.15);
+    display:flex; align-items:center; justify-content:center;
+    color:#fff0f6; font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600;
+    box-shadow:0 6px 16px rgba(0,0,0,0.4);
+  }
+  .letter h3{text-align:center; color:var(--pink-soft); font-size:24px; margin:0 0 4px;}
+  .letter .school{text-align:center; color:var(--gold); font-size:12.5px; letter-spacing:.16em; margin-bottom:26px;}
+  .letter p{color:var(--ink); font-size:14.5px; line-height:1.95; margin:0 0 14px;}
+  .letter .sign{margin-top:26px; text-align:right; color:var(--pink-soft); font-size:22px;}
+
+  footer.page-actions{display:flex; gap:12px; margin-top:40px; flex-wrap:wrap;}
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+<button class="back-btn" id="backBtn" onclick="goBack()">‹ กลับ</button>
+
+<!-- ============ PAGE 1 : COVER ============ -->
+<section class="page active" id="page1">
+  <div class="cover-wrap">
+    <div class="glyph">✦</div>
+    <h1 class="hero-title display">OTHER WORLD</h1>
+    <div class="subtitle script" style="font-size:22px;">ประตูสู่อาณาจักรเวทมนตร์ที่ซ่อนอยู่หลังม่านหมอก</div>
+    <p class="lede" style="margin:0 auto 30px;">รวบรวมทุกเรื่องราวของอาณาจักร — ตำแหน่งงาน กิจกรรม ยศ และการสมัครเข้าร่วม ไว้ในที่เดียว</p>
+    <button class="btn" onclick="enterWorld()">เปิดประตูเข้าไป ✦</button>
+  </div>
+</section>
+
+<!-- ============ PAGE 2 : TABLE OF CONTENTS ============ -->
+<section class="page" id="page2">
+  <div class="eyebrow-mark"></div>
+  <h2 class="page-title th-serif">สารบัญ</h2>
+  <p class="lede">เลือกหัวข้อที่ต้องการสำรวจ</p>
+  <div class="toc-grid">
+    <div class="toc-card" onclick="goTo(3)">
+      <div class="toc-num">I.</div>
+      <div class="toc-name">ตำแหน่งงาน</div>
+      <div class="toc-desc">รายละเอียดหน้าที่ 6 ตำแหน่งในอาณาจักร พร้อมคุณสมบัติที่ต้องการ</div>
+    </div>
+    <div class="toc-card" onclick="goTo(4)">
+      <div class="toc-num">II.</div>
+      <div class="toc-name">กิจกรรมประจำเดือน</div>
+      <div class="toc-desc">ภาพกิจกรรม ช่องเสนอไอเดีย และปฏิทินอัปเดตตลอดเดือน</div>
+    </div>
+    <div class="toc-card" onclick="goTo(5)">
+      <div class="toc-num">III.</div>
+      <div class="toc-name">ยศและของตกแต่ง</div>
+      <div class="toc-desc">ยศแบบเซ็ตและขายเดี่ยว ตัวอย่างสี และความสามารถ</div>
+    </div>
+    <div class="toc-card" onclick="goTo(6)">
+      <div class="toc-num">IV.</div>
+      <div class="toc-name">ท็อปประจำเดือน</div>
+      <div class="toc-desc">อันดับผู้สนับสนุนอาณาจักร พร้อมนับถอยหลังรอบใหม่</div>
+    </div>
+    <div class="toc-card" onclick="goTo(7)">
+      <div class="toc-num">V.</div>
+      <div class="toc-name">สมัครเข้าร่วม</div>
+      <div class="toc-desc">กรอกใบสมัครเพื่อร่วมเป็นส่วนหนึ่งของอาณาจักร</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE 3 : POSITIONS ============ -->
+<section class="page" id="page3">
+  <div class="eyebrow-mark"></div>
+  <h2 class="page-title th-serif">ตำแหน่งงานในอาณาจักร</h2>
+  <p class="lede">กดที่ชื่อตำแหน่งเพื่อดูรายละเอียดหน้าที่และคุณสมบัติ</p>
+  <div class="pos-list" id="posList"></div>
+</section>
+
+<!-- ============ PAGE 4 : ACTIVITIES ============ -->
+<section class="page" id="page4">
+  <div class="eyebrow-mark"></div>
+  <h2 class="page-title th-serif">กิจกรรมประจำเดือน</h2>
+  <p class="lede">ภาพบรรยากาศกิจกรรมที่ผ่านมา และปฏิทินกิจกรรมที่กำลังจะเกิดขึ้น</p>
+
+  <div class="gallery">
+    <div class="gallery-item">ภาพกิจกรรม 1<br><span style="opacity:.6">(แทนที่ด้วยรูปของคุณ)</span></div>
+    <div class="gallery-item">ภาพกิจกรรม 2</div>
+    <div class="gallery-item">ภาพกิจกรรม 3</div>
+    <div class="gallery-item">ภาพกิจกรรม 4</div>
+    <div class="gallery-item">ภาพกิจกรรม 5</div>
+    <div class="gallery-item">ภาพกิจกรรม 6</div>
+  </div>
+
+  <div class="section-block">
+    <h2 class="page-title th-serif" style="font-size:22px;">เสนอไอเดียกิจกรรม</h2>
+    <div class="suggest-box">
+      <div class="field">
+        <label>ชื่อผู้เสนอ</label>
+        <input type="text" id="sugName" placeholder="ชื่อของคุณ">
+      </div>
+      <div class="field">
+        <label>ไอเดียกิจกรรม</label>
+        <textarea id="sugText" placeholder="อยากให้จัดกิจกรรมอะไร เล่าให้เราฟังได้เลย..."></textarea>
+      </div>
+      <button class="btn small" onclick="submitSuggestion()">ส่งไอเดีย</button>
+      <div class="form-status" id="sugStatus"></div>
+    </div>
+  </div>
+
+  <div class="section-block">
+    <h2 class="page-title th-serif" style="font-size:22px;">ปฏิทินกิจกรรม</h2>
+    <div class="cal-wrap">
+      <div class="cal-header">
+        <span id="calMonthLabel"></span>
+      </div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-legend">● วันที่มีกิจกรรม — รายละเอียดจะอัปเดตในดิสคอร์ดของอาณาจักร</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE 5 : RANKS ============ -->
+<section class="page" id="page5">
+  <div class="eyebrow-mark"></div>
+  <h2 class="page-title th-serif">ยศและของตกแต่ง</h2>
+  <p class="lede">เลือกยศที่ถูกใจ ทั้งแบบเซ็ตและขายเดี่ยว ทุกยศมาพร้อมความสามารถเฉพาะตัว</p>
+
+  <div class="rank-contact">
+    <p>สนใจสั่งซื้อหรือสอบถามเพิ่มเติม ติดต่อผู้ดูแลได้ที่ลิงก์ด้านล่าง</p>
+    <a class="btn small" href="#" id="sellerLink" target="_blank" rel="noopener">ติดต่อผู้ขาย</a>
+  </div>
+
+  <div class="rank-grid" id="rankGrid"></div>
+</section>
+
+<!-- ============ PAGE 6 : TOP ONLINE / TOP CASINO ============ -->
+<section class="page" id="page6">
+  <div class="eyebrow-mark"></div>
+  <h2 class="page-title th-serif">ท็อปประจำเดือน</h2>
+  <p class="lede">อันดับจะรีเซ็ตใหม่ทุกเดือน — นับถอยหลังสู่รอบถัดไป</p>
+
+  <div class="top-banner">ภาพประกาศท็อปประจำเดือน (แทนที่ด้วยรูปของคุณ)</div>
+
+  <div class="countdown" id="countdown">
+    <div class="cd-box"><div class="cd-num" id="cdDays">--</div><div class="cd-label">วัน</div></div>
+    <div class="cd-box"><div class="cd-num" id="cdHours">--</div><div class="cd-label">ชั่วโมง</div></div>
+    <div class="cd-box"><div class="cd-num" id="cdMins">--</div><div class="cd-label">นาที</div></div>
+    <div class="cd-box"><div class="cd-num" id="cdSecs">--</div><div class="cd-label">วินาที</div></div>
+  </div>
+
+  <div class="section-block">
+    <h2 class="page-title th-serif" style="font-size:22px;">ท็อปโดเนท</h2>
+    <div class="donor-list" id="donorList"></div>
+  </div>
+</section>
+
+<!-- ============ PAGE 7 : APPLICATION FORM ============ -->
+<section class="page" id="page7">
+  <div class="eyebrow-mark"></div>
+  <h2 class="page-title th-serif">ใบสมัครเข้าร่วมอาณาจักร</h2>
+  <p class="lede">กรอกข้อมูลให้ครบถ้วน ระบบจะบันทึกลง Google ชีตโดยอัตโนมัติ</p>
+
+  <div class="form-card">
+    <div class="form-grid">
+      <div class="field">
+        <label>ชื่อ-นามสกุล</label>
+        <input type="text" id="fName" placeholder="ชื่อจริงของคุณ">
+      </div>
+      <div class="field">
+        <label>ชื่อในดิสคอร์ด / ในเกม</label>
+        <input type="text" id="fNick" placeholder="เช่น Luna#1234">
+      </div>
+      <div class="field">
+        <label>ตำแหน่งที่สมัคร</label>
+        <select id="fPosition">
+          <option value="">-- เลือกตำแหน่ง --</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>อายุ</label>
+        <input type="number" id="fAge" min="1" placeholder="อายุของคุณ">
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label>ช่องทางติดต่อ (Discord / Line)</label>
+        <input type="text" id="fContact" placeholder="ช่องทางที่ติดต่อได้สะดวก">
+      </div>
+      <div class="field" style="grid-column:1/-1;">
+        <label>เหตุผลที่อยากเข้าร่วม</label>
+        <textarea id="fReason" placeholder="เล่าให้เราฟังหน่อยว่าทำไมถึงอยากมาร่วมงานกับเรา"></textarea>
+      </div>
+    </div>
+    <button class="btn" onclick="submitApplication()">ยืนยัน</button>
+    <div class="form-note">* การกดยืนยันหมายถึงคุณยินยอมให้บันทึกข้อมูลนี้ไว้เพื่อพิจารณา</div>
+    <div class="form-status" id="formStatus"></div>
+  </div>
+</section>
+
+<!-- ============ PAGE 8 : ACCEPTANCE LETTER ============ -->
+<section class="page" id="page8">
+  <div class="letter">
+    <div class="seal">OW</div>
+    <div class="school">อาณาจักร OTHER WORLD</div>
+    <h3 class="script" style="font-size:30px;">จดหมายตอบรับ</h3>
+    <p>เรียน คุณ<span id="letterName">-</span>,</p>
+    <p>เป็นเกียรติอย่างยิ่งที่จะแจ้งให้ทราบว่า ท่านได้รับการตอบรับให้เข้าร่วมเป็นส่วนหนึ่งของอาณาจักร ในตำแหน่ง <b id="letterPosition" style="color:var(--pink-soft)">-</b> อย่างเป็นทางการ</p>
+    <p>ขอให้ท่านนำพาความตั้งใจและความสามารถของท่าน มาร่วมสร้างสรรค์เรื่องราวไปด้วยกัน ณ ดินแดนแห่งนี้ ทีมงานทุกคนยินดีต้อนรับท่านด้วยความอบอุ่น</p>
+    <p style="color:var(--ink-muted); font-size:13px;">โปรดติดต่อทีมงานผ่านช่องทางที่ท่านให้ไว้ เพื่อรับขั้นตอนถัดไปภายใน 3 วัน</p>
+    <div class="sign">— ผู้อำนวยการอาณาจักร OTHER WORLD</div>
+    <footer class="page-actions" style="justify-content:center; margin-top:30px;">
+      <button class="btn ghost small" onclick="goTo(2)">กลับไปหน้าสารบัญ</button>
+    </footer>
+  </div>
+</section>
+
+<script>
+/* ============================================================
+   CONFIG — แก้ไขค่าตรงนี้ให้เป็นของอาณาจักรคุณเอง
+   ============================================================ */
+const CONFIG = {
+  // ชีตปลายทาง: https://docs.google.com/spreadsheets/d/1VOTSuhevbAr9THmYDXUat70iWP1pcbWHf3vgOOAUnTk/edit
+  // ต้องนำ URL ของ Google Apps Script Web App มาใส่แทนค่าด้านล่าง (ดูวิธีตั้งค่าในคอมเมนต์ท้ายไฟล์นี้)
+  GOOGLE_SCRIPT_URL: "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec",
+  SELLER_CONTACT_URL: "https://discord.gg/your-invite",
+};
+
+const POSITIONS = [
+  {name:"ผู้ดูแลระบบ (Admin)", tag:"ดูแลภาพรวม", duty:["ดูแลกฎระเบียบและความเรียบร้อยของอาณาจักร","ตัดสินใจกรณีมีข้อพิพาทระหว่างสมาชิก","ประสานงานกับทีมงานฝ่ายอื่น ๆ"], qual:["มีความรับผิดชอบสูง ใจเย็น","ออนไลน์สม่ำเสมอ","มีประสบการณ์ดูแลชุมชนมาก่อนจะพิจารณาเป็นพิเศษ"]},
+  {name:"ทีมงานต้อนรับ", tag:"ดูแลสมาชิกใหม่", duty:["ต้อนรับและแนะนำกฎให้สมาชิกใหม่","ตอบคำถามเบื้องต้นเกี่ยวกับอาณาจักร","ช่วยแนะนำช่องทางต่าง ๆ ภายในเซิร์ฟเวอร์"], qual:["พูดจาสุภาพ เป็นมิตร","ใจเย็น อดทนกับคำถามซ้ำ ๆ ได้","ว่างช่วงเย็น-กลางคืนเป็นอย่างน้อย"]},
+  {name:"ทีมงานประชาสัมพันธ์", tag:"สื่อสารกับภายนอก", duty:["จัดทำโพสต์ประชาสัมพันธ์กิจกรรมและข่าวสาร","ดูแลช่องทางโซเชียลของอาณาจักร","ติดตามฟีดแบ็กจากสมาชิก"], qual:["เขียนข้อความน่าอ่าน กระชับ","มีไอเดียด้านการนำเสนอ","ถ่ายภาพ/ตัดต่อเบื้องต้นได้จะดีมาก"]},
+  {name:"ทีมงานกิจกรรม", tag:"จัดอีเวนต์", duty:["วางแผนและดำเนินกิจกรรมประจำเดือน","เตรียมของรางวัลและกติกากิจกรรม","สรุปผลและประกาศผู้ชนะ"], qual:["ชอบคิดไอเดียสนุก ๆ ใหม่ ๆ","ทำงานเป็นทีมได้ดี","บริหารเวลาได้ตรงตามกำหนดการ"]},
+  {name:"ทีมงานกราฟิก", tag:"ออกแบบภาพ", duty:["ออกแบบแบนเนอร์ โปสเตอร์ และสื่อกิจกรรม","ปรับภาพให้เข้ากับธีมของอาณาจักร","ทำงานร่วมกับทีมประชาสัมพันธ์และทีมกิจกรรม"], qual:["ใช้โปรแกรมออกแบบได้อย่างน้อย 1 โปรแกรม","มีพอร์ตผลงานเบื้องต้น","ส่งงานตรงเวลา"]},
+  {name:"ทีมงานตรวจสอบ", tag:"ดูแลความเรียบร้อย", duty:["ตรวจสอบรายงานปัญหาจากสมาชิก","ติดตามพฤติกรรมที่ผิดกฎภายในอาณาจักร","รายงานสรุปให้ผู้ดูแลระบบทราบ"], qual:["ละเอียดรอบคอบ เป็นกลาง","รักษาความลับของข้อมูลได้","ไม่มีอคติในการตัดสินใจ"]},
+];
+
+const RANKS = [
+  {name:"ยศ Moonlight Witch", type:"เซ็ต", price:"59 บาท", colors:["#f0a8c4","#c9a66b","#2c1a24"], desc:"ป้ายชื่อสีชมพูเรืองแสง พร้อมไอคอนดวงจันทร์ และสิทธิ์เปลี่ยนสีข้อความในแชทได้ 1 ครั้ง/เดือน"},
+  {name:"ยศ Ember Charm", type:"ขายเดี่ยว", price:"29 บาท", colors:["#c9628f","#c9a66b"], desc:"ป้ายชื่อโทนทองอมชมพู พร้อมไอคอนเปลวเทียนหน้าชื่อ"},
+  {name:"ยศ Whisper Rose", type:"เซ็ต", price:"79 บาท", colors:["#f3c4dc","#8a3f61","#1e0f18"], desc:"รวมป้ายชื่อ + กรอบโปรไฟล์ลายกุหลาบ + สิทธิ์ตั้งชื่อห้องส่วนตัวชั่วคราว"},
+  {name:"ยศ Silver Quill", type:"ขายเดี่ยว", price:"35 บาท", colors:["#c9a9bb","#c9a66b"], desc:"ป้ายชื่อโทนเงิน-ทอง เหมาะกับสายนักเขียน มาพร้อมไอคอนปากกาขนนก"},
+  {name:"ยศ Velvet Owl", type:"เซ็ต", price:"65 บาท", colors:["#271420","#eaa6c6"], desc:"ป้ายชื่อ + อีโมจิพิเศษเฉพาะยศ + สิทธิ์เข้าห้องกิจกรรมพิเศษก่อนใคร"},
+  {name:"ยศ Petal Ash", type:"ขายเดี่ยว", price:"25 บาท", colors:["#d98bb0","#3a1e2c"], desc:"ป้ายชื่อโทนชมพูเถ้าถ่าน เรียบหรู เหมาะกับทุกธีมโปรไฟล์"},
+];
+
+const DONORS = [
+  {name:"Ashwood", amt:"1,200 บาท"},
+  {name:"Lunara", amt:"980 บาท"},
+  {name:"Kaelen", amt:"760 บาท"},
+  {name:"Wisteria", amt:"540 บาท"},
+  {name:"Bramble", amt:"410 บาท"},
+];
+
+// วันในเดือนที่มีกิจกรรม (แก้ไข/เพิ่มได้ตามจริง หรือดึงจาก Google Sheet ในอนาคต)
+const EVENT_DAYS = [5, 12, 18, 24];
+
+/* ============================================================
+   NAVIGATION
+   ============================================================ */
+let historyStack = [1];
+let pendingPosition = "";
+let canViewLetter = false; // เปิดใช้งานได้เฉพาะหลังกด "ยืนยัน" ที่หน้า 7 เท่านั้น
+
+function goTo(n){
+  if(n === 8 && !canViewLetter){
+    // ห้ามเข้าหน้าจดหมายตอบรับโดยตรง ต้องมาจากการกดยืนยันในหน้า 7 เท่านั้น
+    n = 7;
+  }
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page'+n).classList.add('active');
+  if(historyStack[historyStack.length-1] !== n) historyStack.push(n);
+  window.scrollTo({top:0, behavior:'smooth'});
+  document.getElementById('backBtn').style.display = (historyStack.length > 1) ? 'block' : 'none';
+}
+function goBack(){
+  if(historyStack.length > 1){
+    historyStack.pop();
+    const prev = historyStack[historyStack.length-1];
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page'+prev).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+    document.getElementById('backBtn').style.display = (historyStack.length > 1) ? 'block' : 'none';
+  }
+}
+
+function enterWorld(){
+  // ออกจากหน้าแรกแล้วจะไม่สามารถย้อนกลับมาหน้าแรกได้อีก
+  historyStack = [2];
+  goTo(2);
+}
+
+function applyTo(positionName){
+  pendingPosition = positionName;
+  goTo(7);
+  const sel = document.getElementById('fPosition');
+  sel.value = positionName;
+}
+
+/* ============================================================
+   PAGE 3 — POSITIONS
+   ============================================================ */
+function renderPositions(){
+  const wrap = document.getElementById('posList');
+  wrap.innerHTML = POSITIONS.map((p, i)=>`
+    <div class="pos-item" id="pos-${i}">
+      <div class="pos-head" onclick="togglePos(${i})">
+        <div>
+          <div class="pos-name">${p.name}</div>
+          <div class="pos-tag">${p.tag}</div>
+        </div>
+        <div class="pos-arrow">▾</div>
+      </div>
+      <div class="pos-body">
+        <div class="pos-body-in">
+          <b>หน้าที่รับผิดชอบ</b>
+          <ul>${p.duty.map(d=>`<li>${d}</li>`).join('')}</ul>
+          <b>คุณสมบัติ</b>
+          <ul>${p.qual.map(q=>`<li>${q}</li>`).join('')}</ul>
+          <button class="btn small" onclick="event.stopPropagation(); applyTo('${p.name.replace(/'/g,"")}')">สมัครตำแหน่งนี้</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+function togglePos(i){
+  document.getElementById('pos-'+i).classList.toggle('open');
+}
+
+/* ============================================================
+   PAGE 4 — SUGGESTIONS + CALENDAR
+   ============================================================ */
+function submitSuggestion(){
+  const name = document.getElementById('sugName').value.trim();
+  const text = document.getElementById('sugText').value.trim();
+  const status = document.getElementById('sugStatus');
+  if(!text){
+    status.className = 'form-status err';
+    status.textContent = 'กรุณากรอกไอเดียกิจกรรมก่อนส่ง';
+    return;
+  }
+  postToSheet({sheet:'suggestions', name: name || 'ไม่ระบุชื่อ', suggestion: text, timestamp: new Date().toISOString()});
+  status.className = 'form-status ok';
+  status.textContent = 'ส่งไอเดียเรียบร้อยแล้ว ขอบคุณมาก ✦';
+  document.getElementById('sugName').value = '';
+  document.getElementById('sugText').value = '';
+}
+
+function renderCalendar(){
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const monthNames = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+  document.getElementById('calMonthLabel').textContent = `${monthNames[month]} ${year+543}`;
+
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const dow = ["อา","จ","อ","พ","พฤ","ศ","ส"];
+
+  let html = dow.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  for(let i=0;i<firstDay;i++) html += `<div class="cal-day"></div>`;
+  for(let d=1; d<=daysInMonth; d++){
+    const isToday = d === now.getDate();
+    const hasEvent = EVENT_DAYS.includes(d);
+    html += `<div class="cal-day ${hasEvent?'has-event':''} ${isToday?'today':''}">${d}${hasEvent?'<div class="cal-dot"></div>':''}</div>`;
+  }
+  document.getElementById('calGrid').innerHTML = html;
+}
+
+/* ============================================================
+   PAGE 5 — RANKS
+   ============================================================ */
+function renderRanks(){
+  document.getElementById('sellerLink').href = CONFIG.SELLER_CONTACT_URL;
+  const grid = document.getElementById('rankGrid');
+  grid.innerHTML = RANKS.map(r=>`
+    <div class="rank-card">
+      <div class="rank-top">
+        <div class="rank-title">${r.name}</div>
+        <div class="rank-price">${r.price}</div>
+      </div>
+      <div class="rank-type">${r.type}</div>
+      <div class="rank-colors">${r.colors.map(c=>`<div class="swatch" style="background:${c}"></div>`).join('')}</div>
+      <div class="rank-desc">${r.desc}</div>
+    </div>
+  `).join('');
+}
+
+/* ============================================================
+   PAGE 6 — COUNTDOWN + DONORS
+   ============================================================ */
+function renderDonors(){
+  document.getElementById('donorList').innerHTML = DONORS.map((d,i)=>`
+    <div class="donor-row">
+      <div class="donor-rank">${i+1}</div>
+      <div class="donor-name">${d.name}</div>
+      <div class="donor-amt">${d.amt}</div>
+    </div>
+  `).join('');
+}
+function tickCountdown(){
+  const now = new Date();
+  const nextMonth = new Date(now.getFullYear(), now.getMonth()+1, 1, 0,0,0);
+  let diff = nextMonth - now;
+  const d = Math.floor(diff/(1000*60*60*24));
+  const h = Math.floor((diff/(1000*60*60))%24);
+  const m = Math.floor((diff/(1000*60))%60);
+  const s = Math.floor((diff/1000)%60);
+  document.getElementById('cdDays').textContent = String(d).padStart(2,'0');
+  document.getElementById('cdHours').textContent = String(h).padStart(2,'0');
+  document.getElementById('cdMins').textContent = String(m).padStart(2,'0');
+  document.getElementById('cdSecs').textContent = String(s).padStart(2,'0');
+}
+setInterval(tickCountdown, 1000);
+
+/* ============================================================
+   PAGE 7 — APPLICATION FORM
+   ============================================================ */
+function fillPositionOptions(){
+  const sel = document.getElementById('fPosition');
+  POSITIONS.forEach(p=>{
+    const opt = document.createElement('option');
+    opt.value = p.name;
+    opt.textContent = p.name;
+    sel.appendChild(opt);
+  });
+}
+function submitApplication(){
+  const name = document.getElementById('fName').value.trim();
+  const nick = document.getElementById('fNick').value.trim();
+  const position = document.getElementById('fPosition').value;
+  const age = document.getElementById('fAge').value.trim();
+  const contact = document.getElementById('fContact').value.trim();
+  const reason = document.getElementById('fReason').value.trim();
+  const status = document.getElementById('formStatus');
+
+  if(!name || !nick || !position || !contact || !reason){
+    status.className = 'form-status err';
+    status.textContent = 'กรุณากรอกข้อมูลให้ครบทุกช่องก่อนกดยืนยัน';
+    return;
+  }
+
+  postToSheet({
+    sheet:'applications',
+    name, nick, position, age, contact, reason,
+    timestamp: new Date().toISOString()
+  });
+
+  status.className = 'form-status ok';
+  status.textContent = 'ส่งใบสมัครเรียบร้อยแล้ว กำลังพาไปยังจดหมายตอบรับ...';
+
+  document.getElementById('letterName').textContent = name;
+  document.getElementById('letterPosition').textContent = position;
+
+  canViewLetter = true;
+  setTimeout(()=>{
+    goTo(8);
+    // เคลียร์ข้อมูลในฟอร์มทั้งหมดหลังส่งสำเร็จ
+    document.getElementById('fName').value = '';
+    document.getElementById('fNick').value = '';
+    document.getElementById('fPosition').value = '';
+    document.getElementById('fAge').value = '';
+    document.getElementById('fContact').value = '';
+    document.getElementById('fReason').value = '';
+    status.textContent = '';
+  }, 900);
+}
+
+/* ============================================================
+   GOOGLE SHEETS BRIDGE
+   ตั้งค่า Google Apps Script Web App แล้ววาง URL ไว้ที่ CONFIG.GOOGLE_SCRIPT_URL ด้านบน
+   วิธีตั้งค่าอยู่ในคอมเมนต์ท้ายไฟล์นี้
+   ============================================================ */
+function postToSheet(payload){
+  if(!CONFIG.GOOGLE_SCRIPT_URL || CONFIG.GOOGLE_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID')){
+    console.warn('[OTHER WORLD] ยังไม่ได้ตั้งค่า GOOGLE_SCRIPT_URL — ข้อมูลนี้จะยังไม่ถูกบันทึกลงชีตจริง:', payload);
+    return;
+  }
+  fetch(CONFIG.GOOGLE_SCRIPT_URL, {
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'text/plain'},
+    body: JSON.stringify(payload)
+  }).catch(err=>console.error('ส่งข้อมูลไปยังชีตไม่สำเร็จ:', err));
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function makeStars(){
+  const box = document.getElementById('stars');
+  let html = '';
+  for(let i=0;i<60;i++){
+    const x = Math.random()*100, y = Math.random()*100, delay = Math.random()*5;
+    html += `<span style="left:${x}%; top:${y}%; animation-delay:${delay}s;"></span>`;
+  }
+  box.innerHTML = html;
+}
+
+document.getElementById('backBtn').style.display = 'none';
+makeStars();
+renderPositions();
+renderCalendar();
+renderRanks();
+renderDonors();
+fillPositionOptions();
+tickCountdown();
+</script>
+
+<!--
+============================================================
+วิธีเชื่อมต่อกับ Google ชีต (Google Apps Script)
+============================================================
+ชีตปลายทางของคุณ:
+https://docs.google.com/spreadsheets/d/1VOTSuhevbAr9THmYDXUat70iWP1pcbWHf3vgOOAUnTk/edit
+(รหัสชีต / Spreadsheet ID = 1VOTSuhevbAr9THmYDXUat70iWP1pcbWHf3vgOOAUnTk — ใส่ไว้ในโค้ดด้านล่างแล้ว)
+
+หมายเหตุ: จะแปะลิงก์ Google ชีตตรง ๆ ในโค้ดเว็บไม่ได้ เพราะฝั่งเว็บ (JavaScript ที่รันในเบราว์เซอร์คนอื่น) ไม่มีสิทธิ์เขียนข้อมูลลงชีตของคุณโดยตรง
+ต้องสร้าง "สะพาน" ผ่าน Google Apps Script ก่อน (ฟรี ของ Google เอง) ตามขั้นตอนนี้ ทำครั้งเดียวจบ:
+
+1. เปิดชีตของคุณตามลิงก์ด้านบน แล้วสร้าง 2 ชีตย่อย (แท็บด้านล่าง) ชื่อ "applications" และ "suggestions"
+2. ที่เมนูของ Google ชีต ไปที่ ส่วนขยาย (Extensions) > Apps Script
+3. ลบโค้ดเดิมในไฟล์ Code.gs ทั้งหมด แล้ววางโค้ดนี้แทน:
+
+   function doPost(e) {
+     var SPREADSHEET_ID = "1VOTSuhevbAr9THmYDXUat70iWP1pcbWHf3vgOOAUnTk";
+     var data = JSON.parse(e.postData.contents);
+     var sheetName = data.sheet || "applications";
+     var ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+     var sheet = ss.getSheetByName(sheetName) || ss.insertSheet(sheetName);
+     var row = Object.keys(data).filter(function(k){ return k !== "sheet"; }).map(function(k){ return data[k]; });
+     sheet.appendRow(row);
+     return ContentService.createTextOutput("OK");
+   }
+
+4. กด Deploy (มุมขวาบน) > New deployment > กดรูปเฟือง เลือกประเภท "Web app"
+   - Execute as: Me
+   - Who has access: Anyone
+   กด Deploy แล้วกด Authorize access ให้สิทธิ์บัญชี Google ของคุณ
+5. คัดลอก URL ที่ได้ (ต้องลงท้ายด้วย /exec)
+6. นำ URL นั้นมาแทนที่ CONFIG.GOOGLE_SCRIPT_URL ที่ด้านบนของสคริปต์ในไฟล์นี้ แล้วบันทึกไฟล์
+
+ทุกครั้งที่มีคนกดยืนยันใบสมัคร หรือส่งไอเดียกิจกรรม ข้อมูลจะไปเข้าแท็บ "applications" หรือ "suggestions" ในชีตนี้โดยอัตโนมัติ
+============================================================
+-->
+</body>
+</html>
