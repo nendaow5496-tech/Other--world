@@ -1,4 +1,4 @@
-const API = "https://script.google.com/macros/s/AKfycbygwNPsdacNXpN_873dciNuIV2i18t3nh3tXcE6UmjzyUCzu8Hc7JeYlvgRzSEeCmKFYQ/exec";
+const API ="https://script.google.com/macros/s/AKfycbzV-CRY4SYgzo-xUXYOp3AMQpf3PRTAXfHQ4eW54csBvYrEwhk2kpaVITGNhe12aT96/exec";
 
 function sendForm(formType, data, form) {
   const btn = form.querySelector("button");
