@@ -718,7 +718,7 @@ function submitApplication(){
    วิธีตั้งค่าอยู่ในคอมเมนต์ท้ายไฟล์นี้
    ============================================================ */
 function postToSheet(payload){
-  if(!CONFIG.GOOGLE_SCRIPT_URL || CONFIG.GOOGLE_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID')){
+  if(!CONFIG.GOOGLE_SCRIPT_URL || CONFIG.GOOGLE_SCRIPT_URL.includes('https://script.google.com/macros/s/AKfycbzV-CRY4SYgzo-xUXYOp3AMQpf3PRTAXfHQ4eW54csBvYrEwhk2kpaVITGNhe12aT96/exec')){
     console.warn('[OTHER WORLD] ยังไม่ได้ตั้งค่า GOOGLE_SCRIPT_URL — ข้อมูลนี้จะยังไม่ถูกบันทึกลงชีตจริง:', payload);
     return;
   }
