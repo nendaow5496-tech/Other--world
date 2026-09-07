@@ -1,0 +1,47 @@
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"Noto Sans Thai","Prompt",sans-serif;
+  min-height:100vh;padding:24px 16px 60px;color:#fff;
+  background:radial-gradient(ellipse at 20% 0%,#7b1d63 0%,#4a1244 40%,#2a0a2e 100%);
+  background-attachment:fixed;
+}
+.back{
+  display:inline-block;padding:8px 18px;margin-bottom:22px;
+  border:1px solid rgba(255,255,255,.35);border-radius:999px;
+  color:#fff;text-decoration:none;font-size:14px;
+  background:rgba(255,255,255,.06);backdrop-filter:blur(6px);
+}
+.back:hover{background:rgba(255,255,255,.16)}
+h1{font-size:26px;margin-bottom:6px;text-shadow:0 0 18px rgba(255,150,220,.8)}
+.sub{font-size:14px;opacity:.75;margin-bottom:22px}
+.card{
+  max-width:900px;margin:0 auto;padding:26px;
+  border:1px solid rgba(255,255,255,.22);border-radius:20px;
+  background:rgba(255,255,255,.07);backdrop-filter:blur(10px);
+  box-shadow:0 8px 40px rgba(0,0,0,.35);
+}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.full{grid-column:1/-1}
+label{display:block;font-size:14px;margin-bottom:7px;opacity:.9}
+input,select,textarea{
+  width:100%;padding:13px 15px;font-size:15px;color:#fff;
+  font-family:inherit;border-radius:12px;
+  border:1px solid rgba(255,255,255,.28);
+  background:rgba(255,255,255,.08);outline:none;
+}
+input::placeholder,textarea::placeholder{color:rgba(255,255,255,.45)}
+input:focus,select:focus,textarea:focus{
+  border-color:#ff8fd8;box-shadow:0 0 0 3px rgba(255,143,216,.25);
+}
+select option{background:#3a0f38;color:#fff}
+textarea{min-height:110px;resize:vertical}
+button{
+  margin-top:22px;padding:12px 40px;font-size:16px;font-family:inherit;
+  color:#fff;border:none;border-radius:12px;cursor:pointer;
+  background:linear-gradient(135deg,#ff6fc0,#c94fd6);
+  box-shadow:0 0 22px rgba(255,111,192,.55);transition:.2s;
+}
+button:hover{transform:translateY(-2px);box-shadow:0 0 34px rgba(255,111,192,.85)}
+button:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.note{margin-top:14px;font-size:12px;opacity:.6}
+@media(max-width:640px){.grid{grid-template-columns:1fr}.card{padding:20px}}
