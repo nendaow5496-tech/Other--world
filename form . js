@@ -1,4 +1,4 @@
-const API ="https://script.google.com/macros/s/AKfycbzV-CRY4SYgzo-xUXYOp3AMQpf3PRTAXfHQ4eW54csBvYrEwhk2kpaVITGNhe12aT96/exec";
+const API = "https://script.google.com/macros/s/AKfycbzV-CRY4SYgzo-xUXYOp3AMQpf3PRTAXfHQ4eW54csBvYrEwhk2kpaVIT/exec";
 
 function sendForm(formType, data, form) {
   const btn = form.querySelector("button");
@@ -7,19 +7,19 @@ function sendForm(formType, data, form) {
 
   fetch(API, {
     method: "POST",
-    mode: "no-cors",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    mode: "cors",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(Object.assign({ formType: formType }, data))
   })
-    .then(function () {
-      alert("ส่งเรียบร้อยแล้ว ✅");
-      form.reset();
-    })
-    .catch(function () {
-      alert("ส่งไม่สำเร็จ ลองใหม่อีกครั้ง ❌");
-    })
-    .finally(function () {
-      btn.disabled = false;
-      btn.textContent = "ส่งข้อมูล";
-    });
+  .then(function(res) {
+    alert("ส่งเรียบร้อยแล้ว ✅");
+    form.reset();
+    btn.disabled = false;
+    btn.textContent = "ส่งข้อมูล";
+  })
+  .catch(function(err) {
+    alert("ส่งไม่สำเร็จ ลองใหม่อีกครั้ง ❌");
+    btn.disabled = false;
+    btn.textContent = "ส่งข้อมูล";
+  });
 }
