@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>สมัครงาน</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="back" href="index.html">‹ กลับ</a>
+<h1>สมัครร่วมทีม</h1>
+<p class="sub">กรอกข้อมูลให้ครบถ้วน ระบบจะบันทึกลง Google ชีตโดยอัตโนมัติ</p>
+
+<div class="card">
+<form id="jobForm">
+  <div class="grid">
+    <div><label>ชื่อ-นามสกุล</label><input name="name" placeholder="ชื่อจริงของคุณ" required></div>
+    <div><label>ชื่อในดิสคอร์ด / ในเกม</label><input name="discord" placeholder="เช่น Luna#1234"></div>
+    <div>
+      <label>ตำแหน่งที่สมัคร</label>
+      <select name="position" required>
+        <option value="">— เลือกตำแหน่ง —</option>
+        <option>แอดมิน</option>
+        <option>กราฟิก</option>
+        <option>ทีมกิจกรรม</option>
+        <option>ทีมเทคนิค</option>
+        <option>อื่น ๆ</option>
+      </select>
+    </div>
+    <div><label>อายุ</label><input name="age" placeholder="อายุของคุณ"></div>
+    <div class="full"><label>ช่องทางติดต่อ (Discord / Line)</label><input name="phone" placeholder="ช่องทางที่ติดต่อได้สะดวก" required></div>
+    <div class="full"><label>เหตุผลที่อยากเข้าร่วม</label><textarea name="exp" placeholder="เล่าให้เราฟังหน่อยว่าทำไมถึงอยากมาร่วมงานกับเรา"></textarea></div>
+  </div>
+  <button type="submit">ยืนยัน</button>
+  <p class="note">* การกดยืนยันหมายถึงคุณยินยอมให้บันทึกข้อมูลนี้ไว้เพื่อพิจารณา</p>
+</form>
+</div>
+
+<script src="form.js"></script>
+<script>
+document.getElementById("jobForm").addEventListener("submit",function(e){
+  e.preventDefault();const f=e.target;
+  sendForm("job",{
+    name:f.name.value,phone:f.phone.value,discord:f.discord.value,
+    position:f.position.value,age:f.age.value,exp:f.exp.value
+  },f);
+});
+</script>
+</body>
+</html>
