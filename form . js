@@ -1,0 +1,25 @@
+const API = "https://script.google.com/macros/s/AKfycbygwNPsdacNXpN_873dciNuIV2i18t3nh3tXcE6UmjzyUCzu8Hc7JeYlvgRzSEeCmKFYQ/exec";
+
+function sendForm(formType, data, form) {
+  const btn = form.querySelector("button");
+  btn.disabled = true;
+  btn.textContent = "กำลังส่ง...";
+
+  fetch(API, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(Object.assign({ formType: formType }, data))
+  })
+    .then(function () {
+      alert("ส่งเรียบร้อยแล้ว ✅");
+      form.reset();
+    })
+    .catch(function () {
+      alert("ส่งไม่สำเร็จ ลองใหม่อีกครั้ง ❌");
+    })
+    .finally(function () {
+      btn.disabled = false;
+      btn.textContent = "ส่งข้อมูล";
+    });
+}
